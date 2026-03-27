@@ -13,7 +13,7 @@ interface DiodeRegion {
 
 export function DiodeNode() {
   const [bias, setBias] = useState<BiasType>('forward');
-  const [voltage, setVoltage] = useState(0.7);
+  const [voltage, setVoltage] = useState<number>(0.7); // <-- fix TS2363
   const [expanded, setExpanded] = useState(false);
 
   const VT   = 0.026; // thermal voltage ~26mV at 300K
@@ -206,4 +206,4 @@ export function DiodeNode() {
       </div>
     </GlassPanel>
   );
-          }
+            }
