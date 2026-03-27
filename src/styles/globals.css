@@ -1,0 +1,194 @@
+/* ElectroVerse — © 2026 Abiyyu Rafa Ramadhan */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: #040810;
+    color: #c8dde8;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #040810; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,229,255,0.3); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(0,229,255,0.6); }
+
+  ::selection {
+    background: rgba(0,229,255,0.2);
+    color: #00e5ff;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply backdrop-blur-xl bg-white/[0.03] border border-white/[0.08] rounded-2xl;
+  }
+
+  .glass-card-hover {
+    @apply glass-card transition-all duration-300
+           hover:border-neon-cyan/30 hover:bg-white/[0.05]
+           hover:shadow-[0_0_30px_rgba(0,229,255,0.1)];
+  }
+
+  .neon-text-cyan {
+    @apply text-neon-cyan drop-shadow-[0_0_10px_rgba(0,229,255,0.7)];
+  }
+
+  .neon-text-green {
+    @apply text-neon-green drop-shadow-[0_0_10px_rgba(57,255,20,0.7)];
+  }
+
+  .neon-text-purple {
+    @apply text-neon-purple drop-shadow-[0_0_10px_rgba(191,90,242,0.7)];
+  }
+
+  .neon-border-cyan {
+    @apply border-neon-cyan/40 shadow-[0_0_15px_rgba(0,229,255,0.2)];
+  }
+
+  .btn-neon {
+    @apply relative px-6 py-3 font-orbitron text-sm font-medium tracking-widest uppercase
+           text-neon-cyan border border-neon-cyan/40 rounded-lg
+           bg-neon-cyan/5 backdrop-blur-sm
+           transition-all duration-200
+           hover:bg-neon-cyan/15 hover:border-neon-cyan/70 hover:shadow-neon-md
+           active:scale-95 cursor-pointer select-none;
+  }
+
+  .btn-neon-green {
+    @apply btn-neon text-neon-green border-neon-green/40 bg-neon-green/5
+           hover:bg-neon-green/15 hover:border-neon-green/70 hover:shadow-green-md;
+  }
+
+  .circuit-bg {
+    background-color: #040810;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .data-label {
+    @apply font-mono text-xs text-neon-cyan/60 uppercase tracking-widest;
+  }
+
+  .data-value {
+    @apply font-mono text-sm text-neon-cyan font-semibold;
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+
+  .hover-lift {
+    @apply transition-transform duration-200 hover:-translate-y-1;
+  }
+
+  .glow-dot::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: radial-gradient(circle at center, rgba(0,229,255,0.15), transparent 70%);
+    pointer-events: none;
+  }
+}
+
+/* Scan line overlay */
+.scanlines::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 1px,
+    rgba(0,0,0,0.03) 1px,
+    rgba(0,0,0,0.03) 2px
+  );
+}
+
+/* Glitch text effect */
+.glitch-text {
+  position: relative;
+}
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0);
+}
+.glitch-text::before {
+  color: #ff2d55;
+  animation: glitch-1 3s infinite linear alternate-reverse;
+}
+.glitch-text::after {
+  color: #00e5ff;
+  animation: glitch-2 2s infinite linear alternate-reverse;
+}
+@keyframes glitch-1 {
+  0%,90%,100% { clip-path: inset(100% 0 0 0); transform: none; }
+  92% { clip-path: inset(10% 0 70% 0); transform: translate(-2px, 1px); }
+  94% { clip-path: inset(50% 0 30% 0); transform: translate(1px, -1px); }
+  96% { clip-path: inset(80% 0 5% 0); transform: translate(-1px, 0); }
+}
+@keyframes glitch-2 {
+  0%,88%,100% { clip-path: inset(0 0 100% 0); transform: none; }
+  90% { clip-path: inset(5% 0 85% 0); transform: translate(2px, 0); }
+  93% { clip-path: inset(40% 0 45% 0); transform: translate(-1px, 2px); }
+  97% { clip-path: inset(70% 0 10% 0); transform: translate(1px, -1px); }
+}
+
+/* Variable font weight animation */
+.variable-weight {
+  font-variation-settings: 'wght' 400;
+  transition: font-variation-settings 0.3s ease;
+}
+.variable-weight:hover {
+  font-variation-settings: 'wght' 700;
+}
+
+/* Component glow pulse */
+@keyframes componentGlow {
+  0%,100% { box-shadow: 0 0 10px rgba(0,229,255,0.2), inset 0 0 10px rgba(0,229,255,0.05); }
+  50% { box-shadow: 0 0 25px rgba(0,229,255,0.5), inset 0 0 20px rgba(0,229,255,0.1); }
+}
+.component-glow {
+  animation: componentGlow 3s ease-in-out infinite;
+}
+
+/* Burnout effect */
+@keyframes burnout {
+  0% { filter: brightness(1) hue-rotate(0deg); }
+  25% { filter: brightness(2.5) hue-rotate(20deg); }
+  50% { filter: brightness(3) hue-rotate(40deg) saturate(3); }
+  75% { filter: brightness(4) hue-rotate(-20deg) contrast(2); }
+  100% { filter: brightness(0.3) saturate(0) contrast(0.5); }
+}
+.burning {
+  animation: burnout 1.5s ease-out forwards;
+    }
