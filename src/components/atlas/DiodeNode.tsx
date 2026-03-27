@@ -13,24 +13,27 @@ interface DiodeRegion {
 
 export function DiodeNode() {
   const [bias, setBias] = useState<BiasType>('forward');
-  const [voltage, setVoltage] = useState<number>(0.7); // <-- fix TS2363
+  const [voltage, setVoltage] = useState<number>(0.7); // number, fix TS2363
   const [expanded, setExpanded] = useState(false);
 
   const VT   = 0.026; // thermal voltage ~26mV at 300K
   const Is   = 1e-12; // saturation current
   const n    = 1;     // ideality factor
   const I    = Is * (Math.exp(voltage / (n * VT)) - 1);
-  const displayI = bias === 'forward'
-    ? (voltage >= 0.6 ? `${(Math.min(I, 0.1) * 1000).toFixed(1)} mA` : `${(I * 1e9).toFixed(2)} nA`)
-    : `${Is * 1e12 * (1 - Math.exp(-Math.abs(voltage) / VT)).toFixed(4)} pA`;
 
-  const isConductive = bias === 'forward' && voltage >= 0.6;
+  const displayI = bias === 'forward'
+    ? (Number(voltage) >= 0.6
+        ? `${(Math.min(I, 0.1) * 1000).toFixed(1)} mA`
+        : `${(I * 1e9).toFixed(2)} nA`)
+    : `${(Is * 1e12 * (1 - Math.exp(-Math.abs(Number(voltage)) / VT))).toFixed(4)} pA`;
+
+  const isConductive = bias === 'forward' && Number(voltage) >= 0.6;
   const deplWidth    = bias === 'forward'
-    ? Math.max(0.1, 1 - voltage / 1.2)
-    : Math.min(1, 1 + voltage / 5);
+    ? Math.max(0.1, 1 - Number(voltage) / 1.2)
+    : Math.min(1, 1 + Number(voltage) / 5);
 
   const region: DiodeRegion =
-    bias === 'forward' && voltage >= 0.6
+    bias === 'forward' && Number(voltage) >= 0.6
       ? { label: 'Forward Active',  description: 'Current flows freely. Depletion region collapses.', current: displayI, color: 'text-neon-green'  }
       : bias === 'forward'
       ? { label: 'Forward Biased',  description: 'Small voltage — not yet conducting. Barrier present.', current: displayI, color: 'text-neon-cyan'   }
@@ -206,4 +209,4 @@ export function DiodeNode() {
       </div>
     </GlassPanel>
   );
-            }
+                   }
